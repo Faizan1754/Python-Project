@@ -1,0 +1,33 @@
+import requests
+
+def fetch_users_starting_with_S():
+    url = "https://jsonplaceholder.typicode.com/users"
+
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+
+        users = response.json()
+
+        filtered_users = [
+            user for user in users
+            if user.get("address", {}).get("city", "").startswith("S")
+        ]
+
+        if not filtered_users:
+            print("No users found with city starting with 'S'.")
+            return
+
+        for idx, user in enumerate(filtered_users, start=1):
+            print(f"User {idx}:")
+            print(f"  Name: {user['name']}")
+            print(f"  Username: {user['username']}")
+            print(f"  Email: {user['email']}")
+            print(f"  City: {user['address']['city']}")
+            print("-" * 25)
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching data: {e}")
+
+if __name__ == "__main__":
+    fetch_users_starting_with_S()
